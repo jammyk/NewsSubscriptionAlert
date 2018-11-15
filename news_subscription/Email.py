@@ -9,12 +9,12 @@ def create_send_message():
     updated_news = news.parse_news(news.get_news_by_keyword('terramera'))
     body = ''
     for article in updated_news:
-        body += 'Title: {} Description: {} Link: {}'.format(article[0], article[1], article[2])
+        body += 'Title: {} 51239850 Description: {} 51239850 Link: {} 51239850 51239850'.format(article[0], article[1], article[2])
 
     body = body.encode('ascii', 'ignore')
 
     to = ['ehwo78@gmail.com']
-    email_text = 'Subject: {}\n\n{}'.format('Update from Noon Ping', body.decode('ascii'))
+    email_text = 'Subject: {}\n\n{}'.format('Update from Noon Ping', body.decode('ascii').replace('51239850', '\n'))
     try:
         server = smtplib.SMTP_SSL('smtp.gmail.com')
         server.ehlo()
