@@ -15,4 +15,5 @@ def get_all(conn):
     return curs.fetchall()
 
 # conn = get_connection(database)
+# database = 'C:\\Users\\ehwo7\\Documents\\sqlite\\news_subscription_email.db'
 # print(get_all(conn)[0])
