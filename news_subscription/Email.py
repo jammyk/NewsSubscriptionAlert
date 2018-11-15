@@ -19,7 +19,7 @@ def create_send_message():
         server = smtplib.SMTP_SSL('smtp.gmail.com')
         server.ehlo()
         server.login(user, password)
-        server.sendmail(user, to, email_text, mail_options=['SMPTUTF8'])
+        server.sendmail(user, to, email_text)
         server.close()
     except Exception as ex:
         print(ex)
