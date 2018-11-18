@@ -1,32 +1,59 @@
 import smtplib
 import news_subscription.News as news
 
-user = 'noonping.news@gmail.com'
-password = 'home2worldforlurkers!'
+USER = 'noonping.news@gmail.com'
 
 
-def create_send_message():
-    updated_news = news.parse_news(news.get_news_by_keyword('terramera'))
-    body = ''
-    for article in updated_news:
-        body += 'Title: {} 51239850 Description: {} 51239850 Link: {} 51239850 51239850'.format(article[0], article[1], article[2])
+def create_body(articles):
+    """
+    Structures articles in a reader-friendly fashion
 
-    body = body.encode('ascii', 'ignore')
+    :param articles: lst
+        The list of tuples representing articles in from (Title, Description, Link)
+    :return message: str
+        The structured e-mail body
+    """
+    message = ''
+    for article in articles:
+        message += 'Title: {} new_line' \
+                   'Description: {} new_line' \
+                   'Link: {} new_line new_line'.format(article[0], article[1], article[2])
+    message = message.encode('ascii', 'ignore')
+    return message.decode('ascii').replace('new_line', '\n')
 
-    to = ['ehwo78@gmail.com']
-    email_text = 'Subject: {}\n\n{}'.format('Update from Noon Ping', body.decode('ascii').replace('51239850', '\n'))
-    try:
-        server = smtplib.SMTP_SSL('smtp.gmail.com')
-        server.ehlo()
+
+def create_email(email_body='Nothing to show here'):
+    subject_body = 'Subject: {}\n\n{}'.format('Updates from Noon Ping', email_body)
+    return subject_body
+
+
+def login(server):
+    """
+    Login to the server by reading the user email and password from local file
+
+    :param server: smptlib
+        The server to login to
+    """
+    with open('email_login_credentials.txt', 'r') as credentials:
+        user = credentials.readline().strip()
+        password = credentials.readline().strip()
         server.login(user, password)
-        server.sendmail(user, to, email_text)
-        server.close()
-    except Exception as ex:
-        print(ex)
-        print('Uh-oh something went wrong...')
 
 
-create_send_message()
+def send_email(to_list, content):
+    server = smtplib.SMTP_SSL('smtp.gmail.com')
+    server.ehlo()
+    login(server)
+    server.sendmail(USER, to_list, content)
+    server.close()
+
+
+if __name__ == '__main__':
+    #parsed_articles = news.parse_news(news.get_news_by_keyword('Terramera'))
+    list_email = ['ehwo78@gmail.com']
+    send_email(list_email, '')
+    #print(create_body(parsed_articles))
+
 
 
 
