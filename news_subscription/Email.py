@@ -49,9 +49,10 @@ def send_email(to_list, content):
 
 
 if __name__ == '__main__':
-    #parsed_articles = news.parse_news(news.get_news_by_keyword('Terramera'))
-    list_email = ['ehwo78@gmail.com']
-    send_email(list_email, '')
+    parsed_articles = news.parse_news(news.get_news_by_keyword('dogs'))
+    email_content = create_email(create_body(parsed_articles))
+    list_email = []
+    send_email(list_email, email_content)
     #print(create_body(parsed_articles))
 
 

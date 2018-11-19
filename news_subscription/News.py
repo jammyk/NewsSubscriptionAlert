@@ -2,11 +2,12 @@ import requests
 
 API_KEY = '09dab7bdd91948f5a48741f4a4b46135'
 
+
 def get_news_by_keyword(word):
     url = ('https://newsapi.org/v2/everything?'
            'q={}&'
            'sortBy=popularity&'
-           'apiKey=09dab7bdd91948f5a48741f4a4b46135'.format(word))
+           'apiKey={}'.format(word, API_KEY))
     response = requests.get(url)
     return response.json()
 
