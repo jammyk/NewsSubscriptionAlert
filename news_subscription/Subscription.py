@@ -25,6 +25,25 @@ def get_same_enabled_user(conn):
     return curs.fetchall()
 
 
+def get_all_subscriptions(conn):
+    curs = conn.cursor()
+    curs.execute('SELECT DISTINCT subscription FROM email_alerts WHERE enabled = 1')
+    return curs.fetchall()
+
+
+def get_users_with_subscription(conn, subscription):
+    curs = conn.cursor()
+    curs.execute('SELECT email, subscription FROM email_alerts WHERE enabled = 1 AND subscription = ?', (subscription,))
+    return curs.fetchall()
+
+
+def insert_sent_news(conn, hashed_articles):
+    curs = conn.cursor()
+    for hashed_articles in hashed_articles:
+        curs.execute('INSERT INTO sent_articles VALUES (?)', hashed_articles)
+    curs.commit()
+
+
 def parse_email_subscriptions(subscriptions):
     user_subscriptions = dict()
     for subscription in subscriptions:
@@ -37,5 +56,7 @@ def parse_email_subscriptions(subscriptions):
 
 if __name__ == '__main__':
     with get_connection(DATABASE) as conn:
-        user_subscriptions = get_all_enabled(conn)
-        parse_email_subscriptions(user_subscriptions)
+        #get_all_subscriptions(conn)
+        get_users_with_subscription(conn, 'terramera')
+        #user_subscriptions = get_all_enabled(conn)
+        #parse_email_subscriptions(user_subscriptions)
