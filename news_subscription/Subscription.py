@@ -54,9 +54,12 @@ def parse_email_subscriptions(subscriptions):
     return user_subscriptions
 
 
+def check_for_entry(conn, value):
+    curs = conn.cursor()
+    curs.execute('SELECT COUNT(1) FROM hashed_articles WHERE hash = ?', (value,))
+    return curs.fetch()
+
+
 if __name__ == '__main__':
     with get_connection(DATABASE) as conn:
-        #get_all_subscriptions(conn)
         get_users_with_subscription(conn, 'terramera')
-        #user_subscriptions = get_all_enabled(conn)
-        #parse_email_subscriptions(user_subscriptions)
