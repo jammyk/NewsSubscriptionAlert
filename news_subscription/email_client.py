@@ -1,5 +1,5 @@
 import smtplib
-import news_subscription.News as news
+import news_subscription.news as news
 
 USER = 'noonping.news@gmail.com'
 
@@ -9,7 +9,7 @@ def create_body(articles):
     Structures articles in a reader-friendly fashion
 
     :param articles: lst
-        The list of tuples representing articles in from (Title, Description, Link)
+        The list article objects
     :return message: str
         The structured e-mail body
     """
@@ -17,7 +17,7 @@ def create_body(articles):
     for article in articles:
         message += 'Title: {} new_line' \
                    'Description: {} new_line' \
-                   'Link: {} new_line new_line'.format(article[0], article[1], article[2])
+                   'Link: {} new_line new_line'.format(article.title, article.description, article.url)
     message = message.encode('ascii', 'ignore')
     return message.decode('ascii').replace('new_line', '\n')
 

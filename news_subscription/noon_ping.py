@@ -1,14 +1,18 @@
-import news_subscription.Subscription as subs
-import news_subscription.News as news
-import news_subscription.Email as email
+import news_subscription.database as db
+from news_subscription import news
+import news_subscription.email_client as email_client
 
 if __name__ == '__main__':
-    with subs.get_connection() as conn:
-        enabled_subscriptions = subs.get_all_enabled(conn)
-        email_subscription = subs.parse_email_subscriptions(enabled_subscriptions)
-        for user_subscription in email_subscription.keys():
-            for subscription in email_subscription[user_subscription]:
-                email.send_email(user_subscription, email.create_email(email.create_body(news.parse_news(news.get_news_by_keyword(subscription)))))
+    with db.get_connection() as conn:
+        articles = []
+        sub_user_map = db.get_subscription_users(conn)
+        for subscription in sub_user_map:
+            articles = news.get_news_by_keyword(subscription)
+            unique_articles = news.remove_duplicates(articles)
+            formatted_articles = email_client.create_body(unique_articles)
+            formatted_email = email_client.create_email(formatted_articles)
+            email_client.send_email(sub_user_map[subscription], formatted_email)
+            db.insert_sent_news(conn, articles)
 
 
 
