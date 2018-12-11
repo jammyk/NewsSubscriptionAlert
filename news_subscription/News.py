@@ -1,23 +1,29 @@
 import requests
 from . import article
 from . import database
+from datetime import datetime, timedelta
 
 API_KEY = '09dab7bdd91948f5a48741f4a4b46135'
 
 
-def get_news_by_keyword(word):
+def get_news_by_keyword(word, prev_days=0):
     """
     Retrieves the news articles related to the word given
 
     :param word: str
         The keyword to search for
+    :param prev_days: int
+        The previous number of days to query, 0 being today
     :return: lst
         The list of article objects
     """
+    previous_date = datetime.now() - timedelta(days=prev_days)
+    from_date = datetime.strftime(previous_date, '%Y-%m-%d')
     url = ('https://newsapi.org/v2/everything?'
            'q={}&'
+           'from={}&'
            'sortBy=popularity&'
-           'apiKey={}'.format(word, API_KEY))
+           'apiKey={}'.format(word, from_date, API_KEY))
     response = requests.get(url)
     return _parse_news(response.json())
 

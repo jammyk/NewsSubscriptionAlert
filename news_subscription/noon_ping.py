@@ -7,7 +7,7 @@ if __name__ == '__main__':
         articles = []
         sub_user_map = db.get_subscription_users(conn)
         for subscription in sub_user_map:
-            articles = news.get_news_by_keyword(subscription)
+            articles = news.get_news_by_keyword(subscription, 3)
             unique_articles = news.remove_duplicates(articles)
             formatted_articles = email_client.create_body(unique_articles)
             formatted_email = email_client.create_email(formatted_articles)

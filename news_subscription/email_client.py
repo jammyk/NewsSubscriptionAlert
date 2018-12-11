@@ -22,7 +22,9 @@ def create_body(articles):
     return message.decode('ascii').replace('new_line', '\n')
 
 
-def create_email(email_body='Nothing to show here'):
+def create_email(email_body=''):
+    if not email_body:
+        email_body = 'Sorry, there are no articles available!'
     subject_body = 'Subject: {}\n\n{}'.format('Updates from Noon Ping', email_body)
     return subject_body
 
